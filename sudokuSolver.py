@@ -6,37 +6,33 @@ board = [
     [0,0,1,0,5,0,9,3,0],
     [9,0,4,0,6,0,0,0,5],
     [0,7,0,3,0,0,0,1,2],
-    [1,2,0,0,0,7,4,0,1],
+    [1,2,0,0,0,7,4,0,0],
     [0,4,9,2,0,6,0,0,7]
 
 ]
 
-def print_board(bo):
+def solve(bo):
+#Using a backtrack algorithm to solve the board, works in a recursive manner, when cycled throughstatement and hits True statement is done
+#If end of recursion is not reached then find will return a row, colm
+    find = find_empty(bo)
+    if not find:
+        return True
+    else:
+        row, col = find
 
-    for i in range(len(bo)):
-        if i % 3 == 0 and i != 0:
-            print("- - - - - - - - - - - -")
+#Algorithm loops through value 1-9 and if valid it will be added to the board, the algorithm will then continue to add numbers recursively until the entire board is solved
     
-        for j in range(len(bo[0])):
-            if j % 3 == 0 and j != 0:
-                print(" | ", end ="")
+    for i in range(1,10):
+        if valid(bo, i, (row, col)):
+            bo[row][col] = i
 
-            if j == 8:
-                print(bo[i][j])
-            else:
-                print(str(bo[i][j]) + " ", end ="") 
+            if solve(bo):
+                return True
 
 
-def find_empty(boo):
-    
-    for i in range(len(bo)):
-        for j in range(len(bo[0])):
-            if bo [i][j] == 0:
-                return(i, j) #returns row, column
-            
-            
+            bo[row][col] = 0
 
-
+    return False
 
 
 def valid(bo, num, pos):
@@ -56,14 +52,40 @@ def valid(bo, num, pos):
     box_y = pos[0] // 3
 
     #Loop throughs all 9 elements in box 
-    for i in range(box_y ^ 3, box_y*3 + 3):
-        for j in range(box_x ^ 3, box_x*3 + 3):
+    for i in range(box_y*3, box_y*3 + 3):
+        for j in range(box_x*3, box_x*3 + 3):
             if bo[i][j] == num and (i,j) != pos:
                 return False
 
     return True 
 
+def print_board(bo):
+
+    for i in range(len(bo)):
+        if i % 3 == 0 and i != 0:
+            print("- - - - - - - - - - - -")
+    
+        for j in range(len(bo[0])):
+            if j % 3 == 0 and j != 0:
+                print(" | ", end ="")
+
+            if j == 8:
+                print(bo[i][j])
+            else:
+                print(str(bo[i][j]) + " ", end ="") 
 
 
+def find_empty(bo):
+    
+    for i in range(len(bo)):
+        for j in range(len(bo[0])):
+            if bo [i][j] == 0:
+                return(i, j) #returns row, column
+    return None 
+            
 
+print_board(board)
+solve(board)
+print("_______________________")
+print_board(board)
 
